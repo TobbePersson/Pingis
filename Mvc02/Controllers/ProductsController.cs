@@ -12,7 +12,6 @@ using Mvc02.Models.ViewModels;
 
 namespace Mvc02.Controllers
 {
-    [Authorize]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -27,7 +26,7 @@ namespace Mvc02.Controllers
         {
             if (Id.HasValue)
             {
-                return View(await _context.Product.Include(x=> x.Category).Where(x => x.CategoryId == Id).ToListAsync());
+                return View(await _context.Product.Include(x => x.Category).Where(x => x.CategoryId == Id).ToListAsync());
             }
             else
             {
@@ -35,6 +34,7 @@ namespace Mvc02.Controllers
             }
         }
 
+        [Authorize]
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
