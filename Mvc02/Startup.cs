@@ -13,6 +13,7 @@ using Mvc02.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mvc02.Services;
+using Mvc02.Models.Entities;
 
 namespace Mvc02
 {
@@ -50,6 +51,11 @@ namespace Mvc02
                .AddDefaultTokenProviders();
             services.AddTransient<AuthService>();
 
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<ShoppingCart>(sp => ShoppingCart.GetCart(sp));
+
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -69,9 +75,12 @@ namespace Mvc02
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseSession();
             app.UseCookiePolicy();
 
             app.UseAuthentication();
+
+            app.UseBrowserLink();
 
             app.UseMvc(routes =>
             {
