@@ -1,0 +1,26 @@
+﻿@model AddRoleVm
+<h1>All existing roles</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Roles</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach(string role in Model.roles)
+    {
+        <tr>
+            <td>
+                @role
+            </td>
+            <td>
+                <a asp-controller="Admin" asp-action="GetUsersInRole" asp-route-role="@role">Link to users</a>
+            </td>
+        </tr>
+
+    }
+    </tbody>
+
+
+</table>
