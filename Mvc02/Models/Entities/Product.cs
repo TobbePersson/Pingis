@@ -19,8 +19,17 @@ namespace Mvc02.Models
         [Range(0,1000,ErrorMessage ="Måste vara mellan 0 och 1000"), DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Price { get; set; }
+
         [Display(Name = "For sale")]
         public bool ForSale { get; set; }
+
+        [Required(ErrorMessage = "Måste ha en beskrivning")]
+        public string Description { get; set; }
+
+        [Required(ErrorMessage = "Måste fylla på lagersaldo")]
+        public int AmountInStock { get; set; }
+
+        public List<Image> Images { get; set; }
 
         public Category Category { get; set; }
         public int CategoryId { get; set; }

@@ -2,40 +2,40 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Mvc02.Data;
-using Mvc02.Models;
+using Mvc02.Models.Entities;
 using Mvc02.Models.ViewModels;
 
 namespace Mvc02.Controllers
 {
-    [Authorize]
-    public class ProductsController : Controller
+    public class ImagesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ProductsController(ApplicationDbContext context)
+        public ImagesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Products
+        // GET: Images
         public async Task<IActionResult> Index(int? Id)
         {
-            if (Id.HasValue)
+            if (Id == null)
             {
-                return View(await _context.Product.Include(x=> x.Category).Include(x => x.Images).Where(x => x.CategoryId == Id).ToListAsync());
+                return View(await _context.Image.ToListAsync());
             }
             else
             {
-                return View(await _context.Product.Include(x => x.Category).ToListAsync());
+                return View(await _context.Image.Where(x => x.ProductId == Id).ToListAsync());
             }
+
+
         }
 
-        // GET: Products/Details/5
+        // GET: Images/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,55 +43,55 @@ namespace Mvc02.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product.Include(x => x.Category)
+            var image = await _context.Image
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            if (image == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(image);
         }
 
-        // GET: Products/Create
+        // GET: Images/Create
         public IActionResult Create()
         {
-            var vm = new CreateProductVm();
+            var vm = new CreateImageVm();
 
             var list = new List<SelectListItem>();
 
-            var listCategories = _context.Category;
+            var listProducts = _context.Product;
 
-            foreach (var category in listCategories)
+            foreach (var product in listProducts)
             {
                 list.Add(new SelectListItem
                 {
-                    Text = category.Name,
-                    Value = category.Id.ToString()
+                    Text = product.Name,
+                    Value = product.Id.ToString()
                 });
             }
 
-            vm.AllCategories = list;
+            vm.AllProducts = list;
             return View(vm);
         }
 
-        // POST: Products/Create
+        // POST: Images/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,CategoryId,ForSale,Description,AmountInStock")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,ImageUrl,Name,ProductId")] Image image)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
+                _context.Add(image);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View("Index");
+            return View(image);
         }
 
-        // GET: Products/Edit/5
+        // GET: Images/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -99,41 +99,22 @@ namespace Mvc02.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product.FindAsync(id);
-            if (product == null)
+            var image = await _context.Image.FindAsync(id);
+            if (image == null)
             {
                 return NotFound();
             }
-
-            var vm = new CreateProductVm();
-
-            var list = new List<SelectListItem>();
-
-            var listCategories = _context.Category;
-
-            foreach (var category in listCategories)
-            {
-                list.Add(new SelectListItem
-                {
-                    Text = category.Name,
-                    Value = category.Id.ToString()
-                });
-            }
-
-            vm.AllCategories = list;
-            vm.Product = product;
-
-            return View(vm);
+            return View(image);
         }
 
-        // POST: Products/Edit/5
+        // POST: Images/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,CategoryId,ForSale")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ImageUrl,ProductId")] Image image)
         {
-            if (id != product.Id)
+            if (id != image.Id)
             {
                 return NotFound();
             }
@@ -142,12 +123,12 @@ namespace Mvc02.Controllers
             {
                 try
                 {
-                    _context.Update(product);
+                    _context.Update(image);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.Id))
+                    if (!ImageExists(image.Id))
                     {
                         return NotFound();
                     }
@@ -158,10 +139,10 @@ namespace Mvc02.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(image);
         }
 
-        // GET: Products/Delete/5
+        // GET: Images/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -169,30 +150,30 @@ namespace Mvc02.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product
+            var image = await _context.Image
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            if (image == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(image);
         }
 
-        // POST: Products/Delete/5
+        // POST: Images/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Product.FindAsync(id);
-            _context.Product.Remove(product);
+            var image = await _context.Image.FindAsync(id);
+            _context.Image.Remove(image);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductExists(int id)
+        private bool ImageExists(int id)
         {
-            return _context.Product.Any(e => e.Id == id);
+            return _context.Image.Any(e => e.Id == id);
         }
     }
 }

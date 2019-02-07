@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mvc02.Data;
 
 namespace Mvc02.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190207094030_migge2")]
+    partial class migge2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -201,8 +203,6 @@ namespace Mvc02.Data.Migrations
 
                     b.Property<string>("ImageUrl");
 
-                    b.Property<string>("Name");
-
                     b.Property<int>("ProductId");
 
                     b.HasKey("Id");
@@ -218,12 +218,7 @@ namespace Mvc02.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AmountInStock");
-
                     b.Property<int>("CategoryId");
-
-                    b.Property<string>("Description")
-                        .IsRequired();
 
                     b.Property<bool>("ForSale");
 
