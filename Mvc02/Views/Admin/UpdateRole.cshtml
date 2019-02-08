@@ -1,0 +1,17 @@
+﻿@model AddRoleVm
+
+<h1>Update Role</h1>
+
+<div>
+    <div>
+        <div>
+            <form asp-controller="Admin" asp-action="Update" method="post">
+                <input asp-for="RoleIdToUpdate" />
+                <label asp-for="Role">Role name</label>
+                <input asp-for="Role" />
+                <button>Save</button>
+            </form>
+        </div>
+    </div>
+
+</div>

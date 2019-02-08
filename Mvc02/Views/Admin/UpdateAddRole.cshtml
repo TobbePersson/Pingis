@@ -1,0 +1,30 @@
+﻿@model AddRoleVm
+
+<h1>Add new role</h1>
+
+<div>
+    <div>
+        <div>
+            <form asp-controller="Admin" asp-action="AddRole">
+                <label asp-for="Role">New role name:</label>
+                <input asp-for="Role" type="text" />
+                <button>Save</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<h1>Edit role</h1>
+<div>
+    <div>
+        <div>
+            <form asp-controller="Admin" asp-action="UpdateRole">
+                <label>Change role:</label>
+                <select asp-for="RoleInformation.Id" asp-items="Model.RoleItems"></select>
+                <button>Get role information</button>
+            </form>
+        </div>
+    </div>
+
+</div>

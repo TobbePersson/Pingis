@@ -2,18 +2,18 @@
 
 <h1>Admin</h1>
 
-    <div class="form-group">
-<form  asp-action="AddRoleForUser">
-        
+<div class="form-group">
+    <form asp-action="AddRoleForUser">
+
         <div asp-validation-summary="All"></div>
         <label>UserName</label>
 
         <input asp-for="Email" type="email" />
         <span asp-validation-for="Email"></span>
-        <label>Role</label>
-        <input asp-for="Role" type="text" />
-        <span asp-validation-for="Role"></span>
-        <button>OK</button>
-</form>
-        </div>
+        <label>Set role:</label>
+        <select asp-for="RoleInformation.Id" asp-items="Model.RoleItems"></select>
+        <button>Save</button>
+    </form>
+</div>
 <a asp-controller="Admin" asp-action="AllRoles">View all roles</a>
+<a asp-controller="Admin" asp-action="UpdateAddRole">Add and update roles</a>

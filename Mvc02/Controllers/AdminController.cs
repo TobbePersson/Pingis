@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Mvc02.Data;
 using Mvc02.Models.ViewModels;
 using Mvc02.Services;
@@ -28,16 +30,32 @@ namespace Mvc02.Controllers
         }
 
         public IActionResult Index()
-
         {
+            var listofRoles = GetAllRoles();
 
-            return View();
+            var list = new List<SelectListItem>();
+
+            foreach (var role in listofRoles)
+            {
+                list.Add(new SelectListItem
+                {
+                    Text = role.Name,
+                    Value = role.Id.ToString()
+                });
+            }
+
+            AddRoleVm vm = new AddRoleVm();
+
+            vm.RoleItems = list;
+
+            return View(vm);
 
         }
 
         public IActionResult AllRoles()
         {
-            var listOfRoles = _auth.GetAllRoles();
+            var listOfRoles = GetAllRoles();
+
             List<string> roles = new List<string>();
 
             foreach (var role in listOfRoles)
@@ -46,7 +64,6 @@ namespace Mvc02.Controllers
             }
             AddRoleVm vm = new AddRoleVm();
             vm.roles = roles;
-
             return View(vm);
         }
 
@@ -56,15 +73,10 @@ namespace Mvc02.Controllers
             vm.indentityusers = users;
             vm.Role = role;
             return View(vm);
-
         }
 
         public IActionResult AddRoleForUser(AddRoleVm addrole)
-
         {
-            if(!ModelState.IsValid)
-                return View("Index");
-
             var userMail = _auth.GetUserMail(addrole.Email).Result;
 
             if (userMail == true)
@@ -76,18 +88,118 @@ namespace Mvc02.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("Key", "Användaren kunde inte skapas");
-                    return View("Index");
+                    ViewData["message"] = "Funkade inte";
+                    return View("AddRole");
                 }
             }
             else
             {
-                ModelState.AddModelError("Key", "Användaren finns inte.");
-                return View("Index");
+                ViewData["message"] = "Mail fanns inte";
+                return View("AddRole");
 
             }
         }
 
-       
+        [HttpPost]
+        public IActionResult AddRole(AddRoleVm rolename)
+        {
+
+            var checkAdd = _auth.AddRole(rolename).Result;
+
+            var listOfRoles = GetAllRoles();
+
+            List<string> roles = new List<string>();
+
+            foreach (var item in listOfRoles)
+            {
+                roles.Add(item.Name);
+            }
+            AddRoleVm vm = new AddRoleVm();
+            vm.roles = roles;
+            return View("AllRoles", vm);
+
+        }
+        
+        public async Task<IActionResult> UpdateRole(AddRoleVm addrole)
+        {
+            var role = await _auth.GetRoleById(addrole.RoleInformation.Id);
+            AddRoleVm vm = new AddRoleVm();
+            vm.RoleInformation = role;
+            vm.RoleIdToUpdate = role.Id;
+            return View(vm);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Update(AddRoleVm x)
+        {
+            var oldRole = await _auth.GetRoleById(x.RoleIdToUpdate);
+
+            oldRole.Name = x.Role;
+            var answer = await _auth.Update(oldRole, x.Role);
+            var listOfRoles = GetAllRoles();
+
+            List<string> roles = new List<string>();
+
+            foreach (var item in listOfRoles)
+            {
+                roles.Add(item.Name);
+            }
+            AddRoleVm vm = new AddRoleVm();
+            vm.roles = roles;
+            return View("AllRoles",vm);
+        }
+        
+        public IActionResult UpdateAddRole()
+        {
+            var listofRoles = GetAllRoles();
+
+            var list = new List<SelectListItem>();
+
+            foreach (var role in listofRoles)
+            {
+                list.Add(new SelectListItem
+                {
+                    Text = role.Name,
+                    Value = role.Id.ToString()
+                });
+            }
+
+            AddRoleVm vm = new AddRoleVm();
+
+            vm.RoleItems = list;
+
+            return View(vm);
+        }
+
+        public IQueryable<IdentityRole> GetAllRoles()
+        {
+            var listOfRoles = _auth.GetAllRoles();
+            return listOfRoles;
+        }
+
+        public async Task<IActionResult> Delete(string role)
+        {
+            var result = await _auth.DeleteRole(role);
+            var listOfRoles = GetAllRoles();
+
+            List<string> roles = new List<string>();
+
+            foreach (var item in listOfRoles)
+            {
+                roles.Add(item.Name);
+            }
+            AddRoleVm vm = new AddRoleVm();
+            vm.roles = roles;
+            return View("AllRoles", vm);
+        }
+
+        public async Task<IActionResult> DeleteUserById(string Id)
+        {
+            var deleteUser = await _auth.DeleteUser(Id);
+            var viewModel = new DeleteUserVm();
+            viewModel.status = deleteUser;
+
+            return View(viewModel);
+            
+        }
     }
 }
