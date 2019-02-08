@@ -55,6 +55,8 @@ namespace Mvc02
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<ShoppingCart>(sp => ShoppingCart.GetCart(sp));
 
+            services.AddSession();
+            services.AddMemoryCache();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
