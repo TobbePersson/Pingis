@@ -1,30 +1,38 @@
-﻿@model IEnumerable<Mvc02.Models.Product>
+﻿@model IEnumerable<Product>
 
 @{
     ViewData["Title"] = "Products";
 }
 
-<h3>Products</h3>
+<div class="container-fluid">
+    <h3>Products</h3>
 
+    @foreach (var product in Model)
+    {
+        
 
-
-
-@foreach (var item in Model)
-{
-    <tr>
-        <td>
-            <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="@Html.DisplayForModel(item.Name)">@item.Name</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+        @*<tr>
+            <td>*@
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="card text-center" style="width: 18rem;">
+                        <img class="card-img-top" src="@product.FrontImage" alt="@product.Name">
+                        <div class="card-body">
+                            <h4 class="@Html.DisplayForModel(product.Name)">@product.Name</h4>
+                            <h5 class="card-text">Description about the product</h5>
+                            <p class="card-text">@product.Description</p>
+                            <p class="card-text">@product.AmountInStock</p>
+                            <p class="card-text">@product.Price</p>
+                            <a href="#" class="btn btn-primary">Buy</a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-        </td>
-    </tr>
-}
+            @*</td>
+                </tr>*@
+        </div>
+    }
 
-
-
+</div>

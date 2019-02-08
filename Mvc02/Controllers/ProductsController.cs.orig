@@ -12,7 +12,6 @@ using Mvc02.Models.ViewModels;
 
 namespace Mvc02.Controllers
 {
-    [Authorize]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -27,7 +26,11 @@ namespace Mvc02.Controllers
         {
             if (Id.HasValue)
             {
-                return View(await _context.Product.Include(x=> x.Category).Where(x => x.CategoryId == Id).ToListAsync());
+<<<<<<< HEAD
+                return View(await _context.Product.Include(x => x.Category).Where(x => x.CategoryId == Id).ToListAsync());
+=======
+                return View(await _context.Product.Include(x=> x.Category).Include(x => x.Images).Where(x => x.CategoryId == Id).ToListAsync());
+>>>>>>> d3599d8423b17e2766b81eedfb5cf50981b68cbf
             }
             else
             {
@@ -81,7 +84,7 @@ namespace Mvc02.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,CategoryId,ForSale,Description,AmountInStock,FrontImage")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Name,Price,CategoryId,ForSale,Description,AmountInStock")] Product product)
         {
             if (ModelState.IsValid)
             {

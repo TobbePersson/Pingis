@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Mvc02.Data;
+using Mvc02.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 namespace Mvc02.Controllers
 {
     public class CustomersController : Controller
-    { 
+    {
         private readonly ApplicationDbContext _context;
 
         public CustomersController(ApplicationDbContext context)
@@ -17,9 +19,9 @@ namespace Mvc02.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(_context.Product);
+            return View(await _context.Product.ToListAsync());
         }
     }
 }

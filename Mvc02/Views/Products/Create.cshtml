@@ -24,13 +24,28 @@
                 <span asp-validation-for="Product.Price" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Product.Description" class="control-label"></label>
+                <input asp-for="Product.Description" class="form-control" />
+                <span asp-validation-for="Product.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product.AmountInStock" class="control-label"></label>
+                <input asp-for="Product.AmountInStock" class="form-control" />
+                <span asp-validation-for="Product.AmountInStock" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Product.Category" class="control-label"></label>
                 <select asp-for="Product.CategoryId" asp-items="Model.AllCategories"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Product.ForSale" class="control-label"></label>
-                <input asp-for="Product.ForSale" class="form-control" />
+                <label asp-for="Product.ForSale"></label>
+                <input asp-for="Product.ForSale" />
                 <span asp-validation-for="Product.ForSale" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product.FrontImage" class="control-label"></label>
+                <input asp-for="Product.FrontImage" class="form-control" />
+                <span asp-validation-for="Product.FrontImage" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
