@@ -10,6 +10,7 @@ namespace Mvc02.Models.ViewModels
     public class CreateImageVm
     {
         public IEnumerable<SelectListItem> AllProducts { get; set; }
+      //  public List<Image> Images { get; set; }
         public Image Image { get; set; }
         public Product Product { get; set; }
     }

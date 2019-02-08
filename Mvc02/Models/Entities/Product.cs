@@ -31,6 +31,8 @@ namespace Mvc02.Models
 
         public List<Image> Images { get; set; }
 
+        public string FrontImage { get; set; }
+
         public Category Category { get; set; }
         public int CategoryId { get; set; }
     }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mvc02.Data;
 
 namespace Mvc02.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190207132215_2")]
+    partial class _2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -212,25 +214,6 @@ namespace Mvc02.Data.Migrations
                     b.ToTable("Image");
                 });
 
-            modelBuilder.Entity("Mvc02.Models.Entities.ShoppingCartItem", b =>
-                {
-                    b.Property<int>("ShoppingCartItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Amount");
-
-                    b.Property<int?>("ProductId");
-
-                    b.Property<string>("ShoppingCartId");
-
-                    b.HasKey("ShoppingCartItemId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ShoppingCartItems");
-                });
-
             modelBuilder.Entity("Mvc02.Models.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -245,8 +228,6 @@ namespace Mvc02.Data.Migrations
                         .IsRequired();
 
                     b.Property<bool>("ForSale");
-
-                    b.Property<string>("FrontImage");
 
                     b.Property<string>("Name")
                         .IsRequired();
@@ -312,13 +293,6 @@ namespace Mvc02.Data.Migrations
                         .WithMany("Images")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Mvc02.Models.Entities.ShoppingCartItem", b =>
-                {
-                    b.HasOne("Mvc02.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("Mvc02.Models.Product", b =>
